@@ -4,16 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 import com.google.gson.GsonBuilder
-import io.flaterlab.tests.data.model.LoginData
-import io.flaterlab.tests.data.model.LoginResponse
-import io.flaterlab.tests.data.model.PaginatedTests
-import io.flaterlab.tests.data.model.Test
+import io.flaterlab.tests.data.model.*
 import kotlinx.coroutines.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Field
+import retrofit2.http.Path
 import java.io.EOFException
 import java.lang.Exception
 import java.util.*
@@ -68,6 +67,90 @@ class APIManager (var service: ApiService)  {
         GlobalScope.launch (Dispatchers.IO) {
             try {
                 val response = service.login(loginData.username, loginData.password)
+                withContext(Dispatchers.Main){
+                    res.value = response.body()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                if(e is EOFException){
+                    withContext(Dispatchers.Main){
+                        res.value = null
+                    }
+                }
+            }
+        }
+        return res
+    }
+
+    fun signup(signUpData: SignUpData): LiveData<LoginResponse?> {
+        val res = MutableLiveData<LoginResponse?>()
+
+        GlobalScope.launch (Dispatchers.IO) {
+            try {
+                val response = service.signup(signUpData.username, signUpData.password, signUpData.email, signUpData.password2)
+                withContext(Dispatchers.Main){
+                    res.value = response.body()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                if(e is EOFException){
+                    withContext(Dispatchers.Main){
+                        res.value = null
+                    }
+                }
+            }
+        }
+        return res
+    }
+
+    fun beginAttempt(testID: Long): LiveData<Attempt?>{
+        val res = MutableLiveData<Attempt?>()
+
+        GlobalScope.launch (Dispatchers.IO) {
+            try {
+                val response = service.beginAttempt(testID)
+                withContext(Dispatchers.Main){
+                    res.value = response.body()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                if(e is EOFException){
+                    withContext(Dispatchers.Main){
+                        res.value = null
+                    }
+                }
+            }
+        }
+        return res
+    }
+
+    fun finishAttempt(attemptId: Long): LiveData<String>{
+        val res = MutableLiveData<String>()
+
+        GlobalScope.launch (Dispatchers.IO) {
+            try {
+                val response = service.finishAttempt(attemptId)
+                withContext(Dispatchers.Main){
+                    res.value = response.body()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                if(e is EOFException){
+                    withContext(Dispatchers.Main){
+                        res.value = null
+                    }
+                }
+            }
+        }
+        return res
+    }
+
+    fun addAnswer( attemptId: Long, questionId: Long, answerId: String, variant: Long ): LiveData<Answer>{
+        val res = MutableLiveData<Answer>()
+
+        GlobalScope.launch (Dispatchers.IO) {
+            try {
+                val response = service.addAnswer(attemptId, questionId, answerId, variant)
                 withContext(Dispatchers.Main){
                     res.value = response.body()
                 }

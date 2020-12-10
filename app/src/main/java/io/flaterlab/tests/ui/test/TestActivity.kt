@@ -24,22 +24,27 @@ class TestActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(TestViewModel::class.java)
 
         val id = intent.getLongExtra("id", 0)
-        val name = intent.getStringExtra("name")
 
         userData = UserData(this)
         val token = userData.getToken()
 
         viewModel.initApi(token)
 
-        if(id>0){
-            viewModel.getTest(id).observe(this, {
-                it?.let {
-                    // TODO
-                    val ft = supportFragmentManager.beginTransaction()
-                    ft.replace(R.id.test_fragment, getFragment(it))
-                    ft.commit()
-                }
-            })
+        if(id > 0){
+            val  t = userData.getTest(id)
+            if(t == null){
+                viewModel.getTest(id).observe(this, {
+                    it?.let {
+                        val ft = supportFragmentManager.beginTransaction()
+                        ft.replace(R.id.test_fragment, getFragment(it))
+                        ft.commit()
+                    }
+                })
+            }else{
+                val ft = supportFragmentManager.beginTransaction()
+                ft.replace(R.id.test_fragment, getFragment(t))
+                ft.commit()
+            }
         }
     }
 
@@ -55,6 +60,7 @@ class TestActivity : AppCompatActivity() {
             val ft = supportFragmentManager.beginTransaction()
             ft.replace(R.id.test_fragment, getFragment(test))
             ft.commit()
+            userData.saveTest(test)
         }
 
         var fragment: Fragment = TestFragment().apply {
@@ -71,6 +77,7 @@ class TestActivity : AppCompatActivity() {
                     attemptIndex = index
                     testFinishedInterface = object : TestFinishedInterface {
                         override fun finish() {
+                            userData.deleteTest(test.id)
                             val ft = supportFragmentManager.beginTransaction()
                             ft.replace(R.id.test_fragment, getFragment(test))
                             ft.commit()

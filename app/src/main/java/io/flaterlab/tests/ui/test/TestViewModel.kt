@@ -17,6 +17,4 @@ class TestViewModel: ViewModel() {
         return api.getTest(id)
     }
 
-
-
 }

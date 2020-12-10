@@ -1,9 +1,6 @@
 package io.flaterlab.tests.data.api
 
-import io.flaterlab.tests.data.model.LoginData
-import io.flaterlab.tests.data.model.LoginResponse
-import io.flaterlab.tests.data.model.PaginatedTests
-import io.flaterlab.tests.data.model.Test
+import io.flaterlab.tests.data.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -18,7 +15,25 @@ interface ApiService {
     @POST("api/v1/login")
     suspend fun login(@Field("username") username: String, @Field("password") pass: String): Response<LoginResponse>
 
+    @FormUrlEncoded
     @POST("api/v1/signup")
-    suspend fun signup(@Path("id") id: String)
+    suspend fun signup(
+            @Field("username") username: String,
+            @Field("password") pass: String,
+            @Field("email") email: String,
+            @Field("password2") pass2: String): Response<LoginResponse>
 
+    @GET("api/v1/tests/{id}/attempt")
+    suspend fun beginAttempt(@Path("id") testId: Long): Response<Attempt>
+
+    @GET("api/v1/attempt/{id}/finish")
+    suspend fun finishAttempt(@Path("id") id: Long): Response<String>
+
+    @FormUrlEncoded
+    @POST("api/v1/attempt/{id}/answer")
+    suspend fun addAnswer(
+            @Path("id") attemptId: Long,
+            @Field("question_id") questionId: Long,
+            @Field("id") answerId: String,
+            @Field("var") variant: Long ): Response<Answer>
 }
