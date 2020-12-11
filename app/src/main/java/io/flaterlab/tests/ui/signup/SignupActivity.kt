@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import io.flaterlab.tests.R
 import io.flaterlab.tests.data.UserData
 import io.flaterlab.tests.data.api.APIManager
@@ -34,7 +35,7 @@ class SignupActivity : AppCompatActivity() {
             signUpData.password = password.text.toString()
             signUpData.password2 = password2.text.toString()
 
-            apiManager.signup(signUpData).observe(this, {
+            apiManager.signup(signUpData).observe(this, Observer {
 
                 if(it != null){
                     if(it.error == null){

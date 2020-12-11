@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
             val loginData = LoginData()
             loginData.username = username.text.toString()
             loginData.password = password.text.toString()
-            apiManager.login(loginData).observe(this, {
+            apiManager.login(loginData).observe(this, Observer {
                 if(!it.token.isNullOrEmpty()){
                     if(it.error == null){
                         userData.saveToken(it.token!!)

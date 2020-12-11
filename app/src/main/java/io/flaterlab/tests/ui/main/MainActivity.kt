@@ -2,6 +2,7 @@ package io.flaterlab.tests.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.flaterlab.tests.R
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         api = APIManager.create(userData.getToken())
 
-        api.paginateTest(1).observe(this, {
+        api.paginateTest(1).observe(this, Observer {
             it?.let {
                 viewAdapter.update(it.data)
             }
