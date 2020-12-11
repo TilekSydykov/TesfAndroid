@@ -16,7 +16,7 @@
         tools:targetApi="n">
         <activity
             android:theme="@style/Theme.Design.NoActionBar"
-            android:name=".ui.TestingActivity"/>
+            android:name=".ui.testing.TestingActivity"/>
         <activity
             android:name=".ui.TabbedActivity"
             android:label="@string/title_activity_tabbed"
