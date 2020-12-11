@@ -11,6 +11,9 @@ import io.flaterlab.tests.data.model.Attempt
 import io.flaterlab.tests.data.model.Test
 import io.flaterlab.tests.ui.test.attempt.TestAttemptFragment
 import io.flaterlab.tests.ui.test.attempt.TestFinishedInterface
+import kotlinx.android.synthetic.main.activity_test.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TestActivity : AppCompatActivity() {
 
@@ -53,14 +56,23 @@ class TestActivity : AppCompatActivity() {
         val attempts:ArrayList<Attempt> = userData.getAttempts(test.id)
 
         val beginTestButton = View.OnClickListener {
-            val a = Attempt.begin(test)
-            a.testId = test.id
-            attempts.add(a)
-            userData.saveAttempts(test.id, attempts)
-            val ft = supportFragmentManager.beginTransaction()
-            ft.replace(R.id.test_fragment, getFragment(test))
-            ft.commit()
-            userData.saveTest(test)
+            progressBar2.visibility = View.VISIBLE
+            viewModel.api.beginAttempt(test.id).observe(this, {
+                progressBar2.visibility = View.GONE
+                val a = Attempt.begin(test)
+                a.testId = test.id
+                a.startTime = Date()
+                it?.let {
+                    a.id = it.id
+                    a.startTime = it.startTime
+                }
+                attempts.add(a)
+                userData.saveAttempts(test.id, attempts)
+                val ft = supportFragmentManager.beginTransaction()
+                ft.replace(R.id.test_fragment, getFragment(test))
+                ft.commit()
+                userData.saveTest(test)
+            })
         }
 
         var fragment: Fragment = TestFragment().apply {
@@ -69,18 +81,21 @@ class TestActivity : AppCompatActivity() {
             beginListener = beginTestButton
         }
 
-        attempts.forEachIndexed {index, it ->
+        attempts.forEachIndexed {index, it: Attempt ->
             if(!it.isEnded){
                 fragment = TestAttemptFragment().apply {
                     this.test = test
                     attempt = it
                     attemptIndex = index
                     testFinishedInterface = object : TestFinishedInterface {
-                        override fun finish() {
-                            userData.deleteTest(test.id)
-                            val ft = supportFragmentManager.beginTransaction()
-                            ft.replace(R.id.test_fragment, getFragment(test))
-                            ft.commit()
+                        override fun finish(attempt: Attempt) {
+                            viewModel.api.finishAttempt(it.id).observe(this@TestActivity, {
+                                userData.replaceAttemptByIndex(test.id, index, attempt)
+                                userData.deleteTest(test.id)
+                                val ft = supportFragmentManager.beginTransaction()
+                                ft.replace(R.id.test_fragment, getFragment(test))
+                                ft.commit()
+                            })
                         }
                     }
                 }
@@ -90,4 +105,5 @@ class TestActivity : AppCompatActivity() {
 
         return fragment
     }
+
 }

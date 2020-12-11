@@ -16,5 +16,4 @@ class TestViewModel: ViewModel() {
     fun getTest(id: Long): LiveData<Test?>{
         return api.getTest(id)
     }
-
 }

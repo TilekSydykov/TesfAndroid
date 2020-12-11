@@ -35,7 +35,8 @@ class SignupActivity : AppCompatActivity() {
             signUpData.password2 = password2.text.toString()
 
             apiManager.signup(signUpData).observe(this, {
-                if(!it.token.isNullOrEmpty()){
+
+                if(it != null){
                     if(it.error == null){
                         userData.saveToken(it.token!!)
                         progressBar.visibility = View.GONE

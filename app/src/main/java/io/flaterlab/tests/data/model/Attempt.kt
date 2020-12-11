@@ -7,7 +7,7 @@ import kotlin.collections.ArrayList
 class  Attempt {
 
     @SerializedName("Id")
-    var id: Long? = null
+    var id: Long = 0
 
     @SerializedName("TestId")
     var testId: Long? = null

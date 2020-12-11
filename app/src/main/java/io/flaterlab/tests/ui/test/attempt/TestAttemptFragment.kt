@@ -67,7 +67,6 @@ class TestAttemptFragment:  Fragment(){
             attempt.score = attempt.score?.plus(it.score)
         }
         attempt.isEnded = true
-        userData.replaceAttemptByIndex(test.id, attemptIndex, attempt)
-        testFinishedInterface.finish()
+        testFinishedInterface.finish(attempt)
     }
 }
