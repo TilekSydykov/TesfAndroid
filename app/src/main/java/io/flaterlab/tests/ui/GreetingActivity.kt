@@ -20,14 +20,12 @@ class GreetingActivity : AppCompatActivity() {
         Thread{
             Thread.sleep(1000)
             if(data.getToken().isNullOrEmpty()){
-
                 signup.visibility = View.VISIBLE
                 login.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
                 loading_text.visibility = View.GONE
-
             }else{
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, ApgradeMainActivity::class.java))
                 Thread.sleep(1000)
                 finish()
             }
@@ -43,7 +41,7 @@ class GreetingActivity : AppCompatActivity() {
         }
     }
 
-    fun finishWithDelay(){
+    private fun finishWithDelay(){
         Thread{
             Thread.sleep(1000)
             finish()

@@ -7,19 +7,18 @@ import android.view.View
 import io.flaterlab.tests.R
 import kotlinx.android.synthetic.main.dialog_alert.*
 
-class AlertDialog(context: Context) : Dialog(context), View.OnClickListener {
+class AlertDialog(context: Context) : Dialog(context){
     lateinit var text1: String
     lateinit var text2: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_alert)
-        ok_button.setOnClickListener(this)
+        ok_button.setOnClickListener{
+            dismiss()
+        }
         editText1.text = text1
         editText2.text = text2
-    }
-
-    override fun onClick(v: View?) {
-        this.dismiss()
     }
 
     companion object{

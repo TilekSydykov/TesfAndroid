@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.testing.TestQuestionsFragment">
+    tools:context=".ui.testing.TestAnswersFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/answersRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        />
 
 </FrameLayout>

@@ -5,21 +5,26 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import io.flaterlab.tests.R
+import io.flaterlab.tests.data.model.Answer
+import io.flaterlab.tests.data.model.Question
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_text_1,
     R.string.tab_text_2
 )
 
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
+class TestPagerAdapter(private val context: Context, fm: FragmentManager) :
     FragmentPagerAdapter(fm) {
+
+    lateinit var questions: ArrayList<Question>
+    lateinit var answers: ArrayList<Answer>
 
     override fun getItem(position: Int): Fragment {
         when(position){
-            1 -> return TestQuestionsFragment.newInstance()
-            2 -> return TestAnswersFragment.newInstance()
+            0 -> return TestQuestionsFragment.newInstance(questions)
+            1 -> return TestAnswersFragment.newInstance(questions)
         }
-        return RestFragment.newInstance("", "")
+        return RestFragment.newInstance()
     }
 
     override fun getPageTitle(position: Int): CharSequence {
@@ -29,4 +34,5 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     override fun getCount(): Int {
         return 2
     }
+
 }

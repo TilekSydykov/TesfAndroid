@@ -15,12 +15,8 @@
         android:theme="@style/Theme.Tests"
         tools:targetApi="n">
         <activity
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/Theme.Tests.NoActionBar"
             android:name=".ui.testing.TestingActivity"/>
-        <activity
-            android:name=".ui.TabbedActivity"
-            android:label="@string/title_activity_tabbed"
-            android:theme="@style/Theme.Tests.NoActionBar" />
         <activity
             android:name=".ui.ApgradeMainActivity"
             android:label="@string/title_activity_apgrade_main"

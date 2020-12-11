@@ -1,4 +1,4 @@
-package io.flaterlab.tests.ui.gallery
+package io.flaterlab.tests.ui.results
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.flaterlab.tests.R
 
-class GalleryFragment : Fragment() {
+class ResultsFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
+    private lateinit var resultsViewModel: ResultsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        galleryViewModel =
-            ViewModelProvider(this).get(GalleryViewModel::class.java)
+        resultsViewModel =
+            ViewModelProvider(this).get(ResultsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_gallery, container, false)
         val textView: TextView = root.findViewById(R.id.text_gallery)
-        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
+        resultsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

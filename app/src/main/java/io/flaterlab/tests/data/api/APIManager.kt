@@ -1,5 +1,6 @@
 package io.flaterlab.tests.data.api
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
@@ -166,6 +167,49 @@ class APIManager (var service: ApiService)  {
         return res
     }
 
+    fun getTestings(): LiveData<TestingResponse>{
+        val res = MutableLiveData<TestingResponse>()
+
+        GlobalScope.launch (Dispatchers.IO) {
+            try {
+                val response = service.getTestings()
+                withContext(Dispatchers.Main){
+                    Log.d("tag", response.toString())
+                    res.value = response.body()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                if(e is EOFException){
+                    withContext(Dispatchers.Main){
+                        res.value = null
+                    }
+                }
+            }
+        }
+        return res
+    }
+
+    fun getTestingById(id: Long): LiveData<TestingByIdResponse>{
+        val res = MutableLiveData<TestingByIdResponse>()
+
+        GlobalScope.launch (Dispatchers.IO) {
+            try {
+                val response = service.getTesting(id)
+                withContext(Dispatchers.Main){
+                    res.value = response.body()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                if(e is EOFException){
+                    withContext(Dispatchers.Main){
+                        res.value = null
+                    }
+                }
+            }
+        }
+        return res
+    }
+
     companion object{
         fun create(token: String?): APIManager {
             val builder = OkHttpClient.Builder()
@@ -194,4 +238,6 @@ class APIManager (var service: ApiService)  {
             return APIManager(service)
         }
     }
+
+
 }

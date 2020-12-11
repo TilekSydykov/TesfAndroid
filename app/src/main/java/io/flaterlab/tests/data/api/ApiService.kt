@@ -8,6 +8,12 @@ interface ApiService {
     @GET("api/v1/tests")
     suspend fun paginateTest(@Query("page") page:Int): Response<PaginatedTests>
 
+    @GET("api/v1/testings")
+    suspend fun getTestings(): Response<TestingResponse>
+
+    @GET("api/v1/testings/{id}")
+    suspend fun getTesting(@Path("id") id: Long): Response<TestingByIdResponse>
+
     @GET("api/v1/tests/{id}")
     suspend fun getTest(@Path("id") id: Long): Response<Test>
 

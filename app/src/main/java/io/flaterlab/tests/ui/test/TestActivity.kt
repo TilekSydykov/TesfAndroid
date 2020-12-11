@@ -102,7 +102,6 @@ class TestActivity : AppCompatActivity() {
                 return@forEachIndexed
             }
         }
-
         return fragment
     }
 

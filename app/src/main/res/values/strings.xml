@@ -25,12 +25,13 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_home">Тесты</string>
+    <string name="menu_gallery">Результаты</string>
     <string name="title_activity_tabbed">TabbedActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Вопросы</string>
+    <string name="tab_text_2">Ответы</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="begin_test_question">Вы хотите начать тест?</string>
+    <string name="begin_test_warning">После начала теста у вас не будет возможности вернуться.</string>
 </resources>
