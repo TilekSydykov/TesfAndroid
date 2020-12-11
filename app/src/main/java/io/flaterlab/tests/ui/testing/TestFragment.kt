@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import io.flaterlab.tests.R
+import io.flaterlab.tests.ui.ui.main.SectionsPagerAdapter
 
 class TestFragment : Fragment() {
 
@@ -20,13 +23,23 @@ class TestFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.test_fragment, container, false)
+        val root = inflater.inflate(R.layout.test_fragment, container, false)
+
+        val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), requireActivity().supportFragmentManager)
+        val viewPager: ViewPager = root.findViewById(R.id.view_pager)
+        viewPager.adapter = sectionsPagerAdapter
+        val tabs: TabLayout = root.findViewById(R.id.tabs)
+        tabs.setupWithViewPager(viewPager)
+
+        return root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(TestViewModel::class.java)
-        // TODO: Use the ViewModel
+
+
+
     }
 
 }
