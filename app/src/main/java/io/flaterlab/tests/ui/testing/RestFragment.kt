@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.flaterlab.tests.R
+import kotlinx.android.synthetic.main.fragment_rest.*
 import kotlinx.android.synthetic.main.fragment_rest.view.*
 import kotlinx.android.synthetic.main.test_fragment.view.*
 
@@ -19,6 +20,8 @@ class RestFragment : Fragment() {
 
     }
 
+    lateinit var timer : CountDownTimer
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,6 +30,7 @@ class RestFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_rest, container, false)
         root.nextButton.setOnClickListener {
             nextButtonClicked.click()
+            timer.cancel()
         }
         beginTimer(root)
         return root
@@ -41,7 +45,7 @@ class RestFragment : Fragment() {
     }
 
     private fun beginTimer(root: View){
-        object : CountDownTimer((5 * 60 * 1000), 1000){
+        timer = object : CountDownTimer((5 * 60 * 1000), 1000){
             override fun onTick(millis: Long){
                 root.time.text = getTimeLeft((millis/1000))
             }

@@ -26,6 +26,7 @@ class TestFragment : Fragment() {
 
     lateinit var test: Test
     private lateinit var viewModel: TestViewModel
+    lateinit var timer: CountDownTimer
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +36,12 @@ class TestFragment : Fragment() {
         val sectionsPagerAdapter = TestPagerAdapter(requireContext(),
             requireActivity().supportFragmentManager).apply {
                 this.t = test
-                this.nextButton = nextButtonClicked
+                this.nextButton = object : NextButtonClicked{
+                    override fun click() {
+                        timer.cancel()
+                        nextButtonClicked.click()
+                    }
+                }
             }
         beginTimer(root)
         val viewPager: ViewPager = root.findViewById(R.id.view_pager)
@@ -55,7 +61,7 @@ class TestFragment : Fragment() {
     }
 
     fun beginTimer(root: View){
-        object : CountDownTimer((test.duration!! * 60 * 1000), 1000){
+        timer = object : CountDownTimer((test.duration!! * 60 * 1000), 1000){
             override fun onTick(millis: Long){
                 root.time_left.text = getTimeLeft((millis/1000))
             }
