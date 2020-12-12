@@ -1,6 +1,6 @@
 package io.flaterlab.tests.data
 
-import android.annotation.SuppressLint
+
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -15,6 +15,7 @@ class UserData(var context: Context){
     private val testNode = "tests"
 
     private val tokenNode = "token"
+
     fun getToken(): String? {
         val myPrefs = context.getSharedPreferences(prefsNode, Context.MODE_PRIVATE)
         return myPrefs.getString(tokenNode, null)

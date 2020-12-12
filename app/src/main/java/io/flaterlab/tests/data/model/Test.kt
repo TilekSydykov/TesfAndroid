@@ -11,7 +11,7 @@ class Test {
     var name: String? = null
 
     @SerializedName("Duration")
-    var duration: Int? = null
+    var duration: Long? = null
 
     @SerializedName("Info")
     var info: String? = null

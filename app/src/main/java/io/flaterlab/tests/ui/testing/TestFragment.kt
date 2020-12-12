@@ -2,6 +2,7 @@ package io.flaterlab.tests.ui.testing
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +15,11 @@ import kotlinx.android.synthetic.main.test_fragment.view.*
 
 class TestFragment : Fragment() {
 
+    lateinit var nextButtonClicked: NextButtonClicked
+
     companion object {
-        fun newInstance(test: Test) = TestFragment().apply {
+        fun newInstance(test: Test, nextButtonClicked: NextButtonClicked) = TestFragment().apply {
+            this.nextButtonClicked = nextButtonClicked
             this.test = test
         }
     }
@@ -30,17 +34,16 @@ class TestFragment : Fragment() {
         val root = inflater.inflate(R.layout.test_fragment, container, false)
         val sectionsPagerAdapter = TestPagerAdapter(requireContext(),
             requireActivity().supportFragmentManager).apply {
-                questions = test.questions
+                this.t = test
+                this.nextButton = nextButtonClicked
             }
-
+        beginTimer(root)
         val viewPager: ViewPager = root.findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = root.findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
 
         root.test_title.text = test.name
-
-
 
         return root
     }
@@ -51,4 +54,26 @@ class TestFragment : Fragment() {
 
     }
 
+    fun beginTimer(root: View){
+        object : CountDownTimer((test.duration!! * 60 * 1000), 1000){
+            override fun onTick(millis: Long){
+                root.time_left.text = getTimeLeft((millis/1000))
+            }
+            override fun onFinish(){
+                nextButtonClicked.click()
+            }
+        }.start()
+    }
+
+    fun getTimeLeft(timeSeconds: Long): String {
+        var minutes = (timeSeconds/60).toInt().toString()
+        var seconds = (timeSeconds % 60).toString()
+        if(minutes.length < 2){
+            minutes = "0$minutes"
+        }
+        if(seconds.length < 2){
+            seconds = "0$seconds"
+        }
+        return "$minutes:$seconds"
+    }
 }
