@@ -28,10 +28,12 @@ class RestFragment : Fragment() {
     ): View? {
 
         val root = inflater.inflate(R.layout.fragment_rest, container, false)
+
         root.nextButton.setOnClickListener {
             nextButtonClicked.click()
             timer.cancel()
         }
+
         beginTimer(root)
         return root
     }

@@ -9,6 +9,6 @@ class TestingAttempt {
     var timeBegin: Date = Date()
     var testingCopy: Testing? = null
     var tests: ArrayList<Test> = arrayListOf()
-    var lastTestId: Long = 0
+    var lastTestIndex: Int = 0
     var lastTestTimeBegin: Date = Date()
 }

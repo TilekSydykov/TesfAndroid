@@ -48,9 +48,7 @@ class TestFragment : Fragment() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = root.findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
-
         root.test_title.text = test.name
-
         return root
     }
 

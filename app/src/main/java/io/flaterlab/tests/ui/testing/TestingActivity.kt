@@ -9,6 +9,7 @@ import io.flaterlab.tests.data.TestData
 import io.flaterlab.tests.data.UserData
 import io.flaterlab.tests.data.api.APIManager
 import io.flaterlab.tests.data.model.Test
+import io.flaterlab.tests.data.model.local.AnswerSheet
 import io.flaterlab.tests.data.model.local.TestingAttempt
 import io.flaterlab.tests.dialogs.AlertDialog
 
@@ -46,6 +47,7 @@ class TestingActivity : AppCompatActivity() {
         testData.getTestingAttempt()?.let {
             testingAttempt = it
         }
+        currentTestIndex = testingAttempt.lastTestIndex
 
         ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.testing_host_fragment, WaitingFragment.newInstance())
@@ -54,14 +56,16 @@ class TestingActivity : AppCompatActivity() {
         if(id > 0){
             if(testingAttempt.testingCopy == null){
                 viewModel.api.getTestingById(id).observe(this, {
+                    tests.forEach { test->
+                        testData.deleteAnswerSheets(test.id)
+                    }
                     testingAttempt.tests = it.tests
                     testingAttempt.testingCopy = it.testing
-                    testingAttempt.lastTestId = it.tests[0].id
                     testData.saveTestingAttempt(testingAttempt)
                     tests = it.tests
                     nextFragment()
                 })
-            }else{
+            } else {
                 if(testingAttempt.testingCopy!!.id != id){
                     AlertDialog.createAndShow(applicationContext, "Нельзя сдавать два теcта за раз", "")
                     finish()
@@ -87,9 +91,12 @@ class TestingActivity : AppCompatActivity() {
                     nextFragment()
                 }
             })
+            // replace fragment
             ft = supportFragmentManager.beginTransaction()
             ft.replace(R.id.testing_host_fragment, fragment)
             ft.commit()
+            // save last opened fragment in db
+            testingAttempt.lastTestIndex = currentTestIndex
             currentTestIndex++
             lastFragmentType = FragmentType.TEST
         }else{
@@ -103,11 +110,22 @@ class TestingActivity : AppCompatActivity() {
             ft.commit()
             lastFragmentType = FragmentType.REST
         }
+        // save attempt instance  to db
+        testData.saveTestingAttempt(testingAttempt)
     }
 
     private fun testingEnd(){
         ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.testing_host_fragment, ResultFragment.newInstance())
+        ft.replace(R.id.testing_host_fragment, ResultFragment.newInstance(tests, object: NextButtonClicked{
+            override fun click(){
+                finish()
+            }
+        }))
         ft.commit()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // TODO save test begin time to db
     }
 }

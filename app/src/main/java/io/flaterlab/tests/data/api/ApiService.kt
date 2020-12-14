@@ -42,4 +42,11 @@ interface ApiService {
             @Field("question_id") questionId: Long,
             @Field("id") answerId: String,
             @Field("var") variant: Long ): Response<Answer>
+
+    @FormUrlEncoded
+    @POST("api/v1/testings/{id}/score")
+    suspend fun addScore(
+            @Path("id") attemptId: Long,
+            @Field("score") score: Long ): Response<TestingScore>
+
 }

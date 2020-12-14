@@ -167,6 +167,27 @@ class APIManager (var service: ApiService)  {
         return res
     }
 
+    fun addScore( attemptId: Long, score: Long): LiveData<TestingScore>{
+        val res = MutableLiveData<TestingScore>()
+
+        GlobalScope.launch (Dispatchers.IO) {
+            try {
+                val response = service.addScore(attemptId, score)
+                withContext(Dispatchers.Main){
+                    res.value = response.body()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                if(e is EOFException){
+                    withContext(Dispatchers.Main){
+                        res.value = null
+                    }
+                }
+            }
+        }
+        return res
+    }
+
     fun getTestings(): LiveData<TestingResponse>{
         val res = MutableLiveData<TestingResponse>()
 

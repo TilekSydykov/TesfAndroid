@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import io.flaterlab.tests.R
 import io.flaterlab.tests.data.model.Test
 import io.flaterlab.tests.ui.testing.answers.TestAnswersFragment
@@ -15,7 +16,7 @@ private val TAB_TITLES = arrayOf(
 )
 
 class TestPagerAdapter(private val context: Context, fm: FragmentManager) :
-    FragmentPagerAdapter(fm) {
+    FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT ) {
 
     lateinit var t: Test
     lateinit var nextButton: NextButtonClicked

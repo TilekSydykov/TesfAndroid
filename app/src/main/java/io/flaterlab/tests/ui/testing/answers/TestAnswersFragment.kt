@@ -37,7 +37,7 @@ class TestAnswersFragment : Fragment() {
     private lateinit var viewModel: TestAnswersViewModel
 
     private lateinit var testData: TestData
-    private var answerSheet: AnswerSheet? = null
+    private lateinit var answerSheet: AnswerSheet
     lateinit var test: Test
 
     lateinit var nextButtonClicked: NextButtonClicked
@@ -53,14 +53,14 @@ class TestAnswersFragment : Fragment() {
 
         answerSheet = testData.getAnswerSheets(test.id)
 
-        if(answerSheet == null){
+        if(answerSheet.answers.size == 0){
             answerSheet = AnswerSheet()
             test.questions.forEach {
-                answerSheet!!.answers.add(Answer().apply {
+                answerSheet.answers.add(Answer().apply {
                     questionId = it.id
                 })
             }
-            answerSheet!!.testId = test.id
+            answerSheet.testId = test.id
             testData.saveAnswerSheets(answerSheet!!)
         }
 
@@ -70,15 +70,14 @@ class TestAnswersFragment : Fragment() {
             }.show()
         }
 
-        testData.getAnswerSheets(test.id)
         viewManager = LinearLayoutManager(requireActivity())
         viewAdapter = ApgradeAnswerAdapter(test.questions, requireContext(),
             object : AnswerSelectListener {
                 override fun select(answerIndex: Int, variantNum: Int) {
-                    answerSheet!!.answers[answerIndex].variant = variantNum.toLong()
-                    testData.saveAnswerSheets(answerSheet!!)
+                    answerSheet.answers[answerIndex].variant = variantNum.toLong()
+                    testData.saveAnswerSheets(answerSheet)
                 }
-            }, answerSheet!!.answers)
+            }, answerSheet.answers)
 
         recyclerView = root.findViewById<RecyclerView>(R.id.answersRecycler).apply {
             setHasFixedSize(true)
